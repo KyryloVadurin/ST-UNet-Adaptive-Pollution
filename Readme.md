@@ -95,7 +95,11 @@ $$C_{adv}(x, y, t+1) = C(x - u_t \Delta t, y - v_t \Delta t, t)$$
 
 Where:
 *   $u_t, v_t$ are the horizontal and vertical wind components.
-*   The wind vector undergoes a stochastic update to simulate turbulence: $\vec{W}_{t+1} = \vec{W}_t + \mathcal{N}(0, \sigma_{wind}^2)$, where $\sigma_{wind}$ represents the `wind_variability` parameter.
+*   The wind vector undergoes a stochastic update to simulate turbulence:
+
+$$\vec{W}_{t+1} = \vec{W}_t + \mathcal{N}(0, \sigma_{wind}^2)$$ 
+
+where $\sigma_{wind}$ represents the `wind_variability` parameter.
 
 In the implementation, this is achieved via **bilinear interpolation shifting**, which prevents aliasing artifacts when wind vectors are non-integers, ensuring a smooth physical flow.
 
@@ -230,7 +234,11 @@ The **Background Suppression** term is quadratic ($Pred^2$), which aggressively 
 ### Peak Intensity & Mass Conservation
 To prevent the model from "blurring" the epicenters to minimize MSE, we apply two physical constraints:
 1.  **Peak Penalty:** $\mathcal{L}_{peak} = \text{Huber}(\max(Pred), \max(Target))$. This forces the maximum predicted intensity to reach the actual emission magnitude.
-2.  **Mass Conservation:** $\mathcal{L}_{mass} = |\sum Pred_{x,y} - \sum Target_{x,y}|$. This ensures the total "volume" of predicted pollution matches the total emissions in the environment, preventing the model from over-estimating the area of the hazard zone.
+2.  **Mass Conservation:**
+
+$$\mathcal{L}_{mass} = |\sum Pred_{x,y} - \sum Target_{x,y}|$$
+
+This ensures the total "volume" of predicted pollution matches the total emissions in the environment, preventing the model from over-estimating the area of the hazard zone.
 
 ![Loss Dynamics Analysis](imgs/output_13_0.png)
 
