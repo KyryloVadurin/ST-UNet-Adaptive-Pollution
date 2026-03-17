@@ -49,8 +49,6 @@ The core intelligence of the pipeline resides in the **Spatio-Temporal UNet (ST-
 
 *   **Architecture Dynamics:** The network utilizes a symmetric Encoder-Decoder structure. The Encoder compresses the sparse grid, aggregating global context (e.g., how wind across the map affects a specific zone). The Decoder reconstructs the high-resolution prediction. Crucially, **Bilinear Upsampling** is used instead of transposed convolutions to eliminate "checkerboard" artifacts, ensuring the output represents a continuous fluid medium. **Residual Blocks** with spatial dropout prevent gradient vanishing and combat overfitting.
 
-![Training Dynamics](imgs/output_9_1.png)
-
 *   **The Ultimate OmniStructural Loss:** The training engine (`Trainer`) optimizes the network using a highly customized, multi-dimensional loss function designed specifically for this physical domain:
     *   **Background Suppression Penalty ($w_{bg}$):** A massive squared penalty applied only to areas where the ground truth is zero. This acts as a "hammer" against overexposure, physically forbidding the network from drawing light in clean air.
     *   **Mass Conservation Constraint ($w_{mass}$):** Penalizes the network if the total sum (integral) of the predicted pollution differs from reality. This prevents the model from predicting overly wide, diffused clouds.
@@ -63,8 +61,6 @@ This delicate balance ensures that the network does not take "lazy" optimization
 
 ## 1.6 Multi-Faceted Numerical Evaluation
 A low loss value during training does not guarantee a physically accurate model. The pipeline includes a rigorous `SystemEvaluator` that benchmarks the Neural Network against a `ClassicalBaseline` (a weighted spatial averaging algorithm combined with Gaussian dispersion heuristics).
-
-![Evaluation Metrics](imgs/output_13_0.png)
 
 Because pollution mapping is simultaneously a regression, localization, and segmentation problem, the evaluation sweeps across multiple mathematical domains:
 *   **Regression & Error (RMSE, MAE, sMAPE):** Measures the absolute pixel-wise numerical accuracy of the prediction.
@@ -215,9 +211,6 @@ Where $f(x)$ is a composite of Convolutions, Batch Normalization, and Spatial Dr
 ### Bilinear Upsampling vs. Deconvolution
 To eliminate the "checkerboard" artifacts common in spatial reconstruction (where the grid appears pixelated), the decoder utilizes **Bilinear Upsampling** followed by a smoothing convolution. This approximates the continuous nature of atmospheric dispersion better than learnable transposed convolutions, ensuring the output respects the spatial smoothness of a fluid medium.
 
-![Training Progress and Checkerboard Mitigation](imgs/output_9_1.png)
-
-
 
 ## 3.3 OmniStructural Loss Function
 The model is optimized via a composite loss function $\mathcal{L}_{total}$ that balances pixel-wise accuracy, spatial cleanliness, and physical volume consistency.
@@ -239,9 +232,6 @@ To prevent the model from "blurring" the epicenters to minimize MSE, we apply tw
 $$\mathcal{L}_{mass} = |\sum Pred_{x,y} - \sum Target_{x,y}|$$
 
 This ensures the total "volume" of predicted pollution matches the total emissions in the environment, preventing the model from over-estimating the area of the hazard zone.
-
-![Loss Dynamics Analysis](imgs/output_13_0.png)
-
 
 
 ## 3.4 Spatial Augmentation Algebra
