@@ -90,6 +90,7 @@ The transport of pollutants is primarily driven by the wind field. In fluid dyna
 
 ### Discrete Spatial Shifting
 We model the pollution concentration $C$ at spatial coordinates $(x, y)$ and time $t$ using an Eulerian grid approach. The displacement is governed by a stochastic wind vector $\vec{W}_t = [u_t, v_t]^T$. The update rule for advection is:
+
 $$C_{adv}(x, y, t+1) = C(x - u_t \Delta t, y - v_t \Delta t, t)$$
 
 Where:
@@ -219,8 +220,11 @@ The model is optimized via a composite loss function $\mathcal{L}_{total}$ that 
 
 ### Asymmetric Weighted MSE
 We differentiate between "Foreground" (the pollution cloud) and "Background" (clean air) using a binary mask $\mathcal{M}$:
+
 $$\mathcal{L}_{fg} = \|(Pred - Target) \odot \mathcal{M}\|_2^2, \quad \mathcal{M} = [Target > 0.05]$$
+
 $$\mathcal{L}_{bg} = \|(Pred^2) \odot (1 - \mathcal{M})\|_1$$
+
 The **Background Suppression** term is quadratic ($Pred^2$), which aggressively penalizes even minor "light leaks" in clean zones, resulting in the high-contrast "black background" predictions.
 
 ### Peak Intensity & Mass Conservation
