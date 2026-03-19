@@ -327,4 +327,4 @@ If this framework aids your research in spatio-temporal modeling or environmenta
 ---
 
 ## 9. License
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
